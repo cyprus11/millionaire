@@ -131,4 +131,36 @@ RSpec.describe Game, type: :model do
       expect(game_w_questions.previous_level).to eq(Question::QUESTION_LEVELS.max)
     end
   end
+
+  context 'answer current question!' do
+    let(:right_answer) { game_w_questions.game_questions[game_w_questions.current_level].correct_answer_key }
+
+    it 'be falsey when time out' do
+      game_w_questions.created_at = 35.minutes.ago
+
+      expect(game_w_questions.answer_current_question!(right_answer)).to be_falsey
+    end
+
+    it 'be true when answer right' do
+      current_level = game_w_questions.current_level
+      game_w_questions.created_at = Time.now
+
+      expect(game_w_questions.answer_current_question!(right_answer)).to be_truthy
+      expect(game_w_questions.current_level).to eq(current_level + 1)
+    end
+
+    it 'be falsey when answer wrong' do
+      wrong_answer = 'wrong answer'
+
+      expect(game_w_questions.answer_current_question!(wrong_answer)).to be_falsey
+    end
+
+    it 'when last question right' do
+      game_w_questions.current_level = Question::QUESTION_LEVELS.max
+
+      expect(game_w_questions.answer_current_question!(right_answer)).to be_truthy
+      expect(game_w_questions.finished?).to be_truthy
+      expect(game_w_questions.prize).to eq(Game::PRIZES[Question::QUESTION_LEVELS.max])
+    end
+  end
 end
