@@ -21,8 +21,9 @@ group :development, :test do
   gem 'sqlite3', '~> 1.3.13'
   gem 'byebug'
   gem 'rspec-rails', '~> 3.4'
-  gem 'factory_girl_rails'
+  gem 'factory_bot'
   gem 'shoulda-matchers'
+  gem 'therubyracer'
 
   # Гем, который использует rspec, чтобы смотреть наш сайт
   gem 'capybara'

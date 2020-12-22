@@ -56,10 +56,11 @@ RSpec.configure do |config|
 
   # Filter lines from Rails gems in backtraces.
   config.filter_rails_from_backtrace!
+  FactoryBot.reload
+  config.include FactoryBot::Syntax::Methods
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
 end
 
 # Это нужно, чтобы капибара искала стили и js в правильном месте
 Capybara.asset_host = "http://localhost:3000"
-
