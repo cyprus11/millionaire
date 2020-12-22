@@ -108,4 +108,27 @@ RSpec.describe Game, type: :model do
       expect(game_w_questions.status).to eq(:money)
     end
   end
+
+  context 'current game question' do
+    it 'current question' do
+      game_w_questions.current_level = 5
+      expect(game_w_questions.current_game_question).to eq(game_w_questions.game_questions[game_w_questions.current_level])
+    end
+  end
+
+  context 'previous level' do
+    it 'prev level' do
+      game_w_questions.current_level = 10
+      expect(game_w_questions.previous_level).to eq(9)
+    end
+
+    it 'new game' do
+      expect(game_w_questions.previous_level).to eq(-1)
+    end
+
+    it 'when game finished' do
+      game_w_questions.current_level = Question::QUESTION_LEVELS.max + 1
+      expect(game_w_questions.previous_level).to eq(Question::QUESTION_LEVELS.max)
+    end
+  end
 end
