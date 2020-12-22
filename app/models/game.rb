@@ -15,7 +15,7 @@ class Game < ActiveRecord::Base
   FIREPROOF_LEVELS = [4, 9, 14].freeze
 
   # время на одну игру
-  TIME_LIMIT = 35.minutes
+  TIME_LIMIT = 35.minutes.freeze
 
   belongs_to :user
 
@@ -122,6 +122,18 @@ class Game < ActiveRecord::Base
     finish_game!((previous_level > -1) ? PRIZES[previous_level] : 0, false)
   end
 
+  # def use_help(help_type)
+  #   help_types = %i(fifty_fifty audience_help friend_call)
+  #   help_type = help_type.to_sym
+  #   raise ArgumentError.new('wrong help_type') unless help_types.include?(help_type)
+  #
+  #   unless self["#{help_type}_used"]
+  #     self["#{help_type}_used"] = true
+  #     current_game_question.apply_help!(help_type)
+  #     save
+  #   end
+  #    # false не нужен — unless вернёт nil, если не будет исполнен
+  # end
 
   # todo: дорогой ученик!
   # Код метода ниже можно сократиь в 3 раза с помощью возможностей Ruby и Rails,

@@ -60,5 +60,52 @@ RSpec.describe Game, type: :model do
       expect(game_w_questions.status).to eq(:in_progress)
       expect(game_w_questions.finished?).to be_falsey
     end
+
+    it "return correct count of money" do
+      level = game_w_questions.current_level
+      q = game_w_questions.current_game_question
+      b = user.balance
+
+      game_w_questions.answer_current_question!(q.correct_answer_key)
+
+      # перешли на 2 уровень
+      expect(game_w_questions.current_level).to eq(level + 1)
+
+      # забираем деньги
+      game_w_questions.take_money!
+
+      # проверяем что игра закончилась
+      expect(game_w_questions.finished?).to be_truthy
+
+      # проверяем что пользователь получил деньги
+      expect(user.balance).to eq(b + game_w_questions.prize)
+    end
+  end
+
+  context 'status method' do
+    before(:each) do
+      game_w_questions.finished_at = Time.now
+      expect(game_w_questions.finished?).to be_truthy
+    end
+
+    it ':fail' do
+      game_w_questions.is_failed = true
+      expect(game_w_questions.status).to eq(:fail)
+    end
+
+    it ':timeout' do
+      game_w_questions.created_at = 1.hour.ago
+      game_w_questions.is_failed = true
+      expect(game_w_questions.status).to eq(:timeout)
+    end
+
+    it ':won' do
+      game_w_questions.current_level = Question::QUESTION_LEVELS.max + 1
+      expect(game_w_questions.status).to eq(:won)
+    end
+
+    it ':money' do
+      expect(game_w_questions.status).to eq(:money)
+    end
   end
 end

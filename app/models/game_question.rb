@@ -20,7 +20,7 @@ class GameQuestion < ActiveRecord::Base
   validates :game, :question, presence: true
 
   # в полях a,b,c,d прячутся индексы ответов из объекта :game
-  validates :a, :b, :c, :d, inclusion: {in: 1..4}
+  validates :a, :b, :c, :d, inclusion: { in: 1..4 }
 
   # Автоматическая сериализация поля в базу (мы юзаем как обычный хэш,
   # а рельсы в базе хранят как строчку)
@@ -34,7 +34,6 @@ class GameQuestion < ActiveRecord::Base
   #   friend_call: 'Василий Петрович считает, что правильный ответ A'
   # }
   #
-
 
   # ----- Основные методы для доступа к данным в шаблонах и контроллерах -----------
 
@@ -56,7 +55,7 @@ class GameQuestion < ActiveRecord::Base
 
   # ключ правильного ответа 'a', 'b', 'c', или 'd'
   def correct_answer_key
-    {a => 'a', b => 'b', c => 'c', d => 'd'}[1]
+    { a => 'a', b => 'b', c => 'c', d => 'd' }[1]
   end
 
   # текст правильного ответа
@@ -88,6 +87,17 @@ class GameQuestion < ActiveRecord::Base
     keys_to_use = keys_to_use_in_help
     self.help_hash[:friend_call] = GameHelpGenerator.friend_call(keys_to_use, correct_answer_key)
     save
+  end
+
+  def apply_help!(help_type)
+    case help_type.to_s
+    when :fifty_fifty
+      add_fifty_fifty
+    when :audience_help
+      add_audience_help
+    when :friend_call
+      add_friend_call
+    end
   end
 
   private
