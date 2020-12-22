@@ -25,16 +25,15 @@ class Game < ActiveRecord::Base
   validates :user, presence: true
 
   # текущий вопрос (его уровень сложности)
-  validates :current_level, numericality: {only_integer: true}, allow_nil: false
+  validates :current_level, numericality: { only_integer: true }, allow_nil: false
 
   # выигрышь игрока - от нуля до максимального приза за игру
   validates :prize,
             presence: true,
-            numericality: {greater_than_or_equal_to: 0, less_than_or_equal_to: PRIZES.last}
+            numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: PRIZES.last }
 
   # Scope - подмножество игр, у которых поле finished_at пустое
   scope :in_progress, -> { where(finished_at: nil) }
-
 
   #---------  Фабрика-генератор новой игры ------------------------------
 
@@ -172,7 +171,6 @@ class Game < ActiveRecord::Base
 
     false
   end
-
 
   # Результат игры, одно из:
   # :fail - игра проиграна из-за неверного вопроса
