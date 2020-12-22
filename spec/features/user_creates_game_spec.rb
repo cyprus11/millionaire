@@ -12,7 +12,7 @@ RSpec.feature 'USER creates a game', type: :feature do
   # здесь важен, так как именно их мы потом будем проверяеть
   let!(:questions) do
     (0..14).to_a.map do |i|
-      FactoryBot.create(
+      create(
         :question, level: i,
         text: "Когда была куликовская битва номер #{i}?",
         answer1: '1380', answer2: '1381', answer3: '1382', answer4: '1383'
