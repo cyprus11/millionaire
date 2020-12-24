@@ -14,10 +14,10 @@ RSpec.describe GameQuestion, type: :model do
   context 'game status' do
     # тест на правильную генерацию хэша с вариантами
     it 'correct .variants' do
-      expect(game_question.variants).to eq({'a' => game_question.question.answer2,
-                                            'b' => game_question.question.answer1,
-                                            'c' => game_question.question.answer4,
-                                            'd' => game_question.question.answer3})
+      expect(game_question.variants).to eq({ 'a' => game_question.question.answer2,
+                                             'b' => game_question.question.answer1,
+                                             'c' => game_question.question.answer4,
+                                             'd' => game_question.question.answer3 })
     end
 
     it 'correct .answer_correct?' do
@@ -34,19 +34,6 @@ RSpec.describe GameQuestion, type: :model do
   # }
   #
 
-  context 'user helpers' do
-    it 'correct audience_help' do
-      expect(game_question.help_hash).not_to include(:audience_help)
-
-      game_question.add_audience_help
-
-      expect(game_question.help_hash).to include(:audience_help)
-
-      ah = game_question.help_hash[:audience_help]
-      expect(ah.keys).to contain_exactly('a', 'b', 'c', 'd')
-    end
-  end
-
   context 'validations check' do
     it "be equal" do
       expect(game_question.text).to eq(game_question.question.text)
@@ -57,6 +44,47 @@ RSpec.describe GameQuestion, type: :model do
   context 'correct answer key' do
     it 'be correct' do
       expect(game_question.correct_answer_key).to eq('b')
+    end
+  end
+
+  describe 'help methods' do
+    context 'fifty_fifty' do
+      it 'correct fifty_fifty' do
+        expect(game_question.help_hash).not_to include(:fifty_fifty)
+        game_question.add_fifty_fifty
+
+        expect(game_question.help_hash).to include(:fifty_fifty)
+        ff = game_question.help_hash[:fifty_fifty]
+
+        expect(ff).to include('b')
+        expect(ff.size).to eq 2
+      end
+    end
+
+    context 'audience_help' do
+      it 'correct audience_help' do
+        expect(game_question.help_hash).not_to include(:audience_help)
+
+        game_question.add_audience_help
+
+        expect(game_question.help_hash).to include(:audience_help)
+
+        ah = game_question.help_hash[:audience_help]
+        expect(ah.keys).to contain_exactly('a', 'b', 'c', 'd')
+      end
+    end
+
+    context 'friend_call' do
+      it 'correct friend_call' do
+        expect(game_question.help_hash).not_to include(:friend_call)
+
+        game_question.add_friend_call
+
+        expect(game_question.help_hash).to include(:friend_call)
+
+        fc = game_question.help_hash[:friend_call]
+        expect(fc).to match(/считает, что это вариант/)
+      end
     end
   end
 end
