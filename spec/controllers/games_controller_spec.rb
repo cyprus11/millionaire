@@ -138,6 +138,21 @@ RSpec.describe GamesController, type: :controller do
         expect(response).to redirect_to(game_path(game))
       end
 
+      # task 62.4: test help fifty_fifty
+      it 'uses fifty_fifty_help' do
+        expect(game_w_questions.current_game_question.help_hash[:fifty_fifty]).not_to be
+        expect(game_w_questions.fifty_fifty_used).to eq(false)
+
+        put :help, id: game_w_questions.id, help_type: :fifty_fifty
+        game = assigns(:game)
+
+        expect(game.finished?).to eq(false)
+        expect(game.fifty_fifty_used).to eq(true)
+        expect(game.current_game_question.help_hash[:fifty_fifty]).to be
+        expect(game.current_game_question.help_hash[:fifty_fifty].size).to eq(2)
+        expect(response).to redirect_to(game_path(game))
+      end
+
       it '#show other user game' do
         alien_game = create(:game_with_questions)
         get :show, id: alien_game.id
