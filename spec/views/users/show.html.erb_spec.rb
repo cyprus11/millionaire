@@ -2,8 +2,11 @@ require 'rails_helper'
 
 RSpec.describe 'users/show', type: :view do
   context 'when users in his profile' do
-    before(:each) do
-      assign(:user, build_stubbed(:user, name: 'Алексий', balance: 1000))
+    let(:current_user) { create(:user, name: 'Алексий', balance: 1000) }
+
+    before do
+      assign(:user, current_user)
+      assign(:games, [build_stubbed(:game)])
     end
 
     it 'render users name' do
@@ -13,10 +16,10 @@ RSpec.describe 'users/show', type: :view do
     end
 
     it 'render change password button in users profile for profile owner' do
-      current_user = assign(:user, build_stubbed(:user, name: 'Алексий', balance: 1000))
-      allow(view).to receive(:current_user).and_return(current_user)
+      sign_in current_user
 
       render
+
       expect(rendered).to match('Сменить имя и пароль')
     end
 
@@ -27,10 +30,10 @@ RSpec.describe 'users/show', type: :view do
     end
 
     it 'renders game partial' do
-      stub_template("users/_game.html.erb" => "User game")
+      stub_template "users/_game.html.erb" => "User game"
 
       render
-      # binding.irb
+
       expect(rendered).to have_content "User game"
     end
   end
