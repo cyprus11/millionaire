@@ -18,7 +18,7 @@ RSpec.describe GamesController, type: :controller do
   let(:game_w_questions) { create(:game_with_questions, user: user) }
 
   # группа тестов для незалогиненного юзера (Анонимус)
-  describe 'when user' do
+  describe 'when users' do
     context 'Anon' do
       # из экшена show анона посылаем
       it 'kick from #show' do
@@ -64,9 +64,9 @@ RSpec.describe GamesController, type: :controller do
     end
 
     # группа тестов на экшены контроллера, доступных залогиненным юзерам
-    context 'Usual user' do
+    context 'Usual users' do
       # перед каждым тестом в группе
-      before(:each) { sign_in user } # логиним юзера user с помощью спец. Devise метода sign_in
+      before(:each) { sign_in user } # логиним юзера users с помощью спец. Devise метода sign_in
 
       # юзер может создать новую игру
       it 'creates game' do
@@ -153,7 +153,7 @@ RSpec.describe GamesController, type: :controller do
         expect(response).to redirect_to(game_path(game))
       end
 
-      it '#show other user game' do
+      it '#show other users game' do
         alien_game = create(:game_with_questions)
         get :show, id: alien_game.id
 
