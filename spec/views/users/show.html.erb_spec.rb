@@ -1,14 +1,15 @@
 require 'rails_helper'
 
 RSpec.describe 'users/show', type: :view do
-  context 'when users in his profile' do
-    let(:current_user) { create(:user, name: 'Алексий', balance: 1000) }
 
-    before do
-      assign(:user, current_user)
-      assign(:games, [build_stubbed(:game)])
-    end
+  let(:current_user) { create(:user, name: 'Алексий', balance: 1000) }
 
+  before do
+    assign(:user, current_user)
+    assign(:games, [build_stubbed(:game)])
+  end
+
+  context 'when users see his profile' do
     it 'render users name' do
       render
 
@@ -23,6 +24,16 @@ RSpec.describe 'users/show', type: :view do
       expect(rendered).to match('Сменить имя и пароль')
     end
 
+    it 'renders game partial' do
+      stub_template "users/_game.html.erb" => "User game"
+
+      render
+
+      expect(rendered).to have_content "User game"
+    end
+  end
+
+  context 'when user check other profile' do
     it 'does not render change password button if users are not in his profile' do
       render
 
