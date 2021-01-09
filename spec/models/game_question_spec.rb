@@ -47,8 +47,8 @@ RSpec.describe GameQuestion, type: :model do
     end
   end
 
-  describe 'help methods' do
-    context '#fifty_fifty' do
+  context 'help methods' do
+    describe '#fifty_fifty' do
       it 'fills in help hash with 50 / 50 questions' do
         expect(game_question.help_hash).not_to include(:fifty_fifty)
         game_question.add_fifty_fifty
@@ -61,7 +61,7 @@ RSpec.describe GameQuestion, type: :model do
       end
     end
 
-    context '#audience_help' do
+    describe '#audience_help' do
       it 'fills in help hash with audience choices' do
         expect(game_question.help_hash).not_to include(:audience_help)
 
@@ -74,7 +74,7 @@ RSpec.describe GameQuestion, type: :model do
       end
     end
 
-    context '#friend_call' do
+    describe '#friend_call' do
       it 'fills in help hash with friend opinion' do
         expect(game_question.help_hash).not_to include(:friend_call)
 
