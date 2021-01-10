@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.feature 'USER visit other user profile', typre: :feature do
+RSpec.feature 'USER visit other user profile', type: :feature do
   let(:games) { create_list(:game, 2, prize: 100) }
 
   let(:user) { create(:user) }
